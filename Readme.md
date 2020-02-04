@@ -1,8 +1,8 @@
 # Process And Invoice
 
 Add a "Process" button to the order tab in your backoffice. Pressing it will 
-print the invoices for all orders with the status 'paid' and put them in the
-status 'processing' instead.
+print the invoices for all orders with the status 'paid', along with a report
+of all these orders, then put them in the status 'processing' instead.
 
 ## Installation
 
