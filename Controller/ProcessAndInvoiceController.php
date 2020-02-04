@@ -23,6 +23,7 @@ use Thelia\Model\OrderProductTax;
 use Thelia\Model\OrderProductTaxQuery;
 use Thelia\Model\OrderQuery;
 use Thelia\Model\OrderStatusQuery;
+use Thelia\Tools\URL;
 
 class ProcessAndInvoiceController extends BaseAdminController
 {
@@ -58,6 +59,8 @@ class ProcessAndInvoiceController extends BaseAdminController
 
     public function processAndInvoice() {
         $paidStatus = OrderStatusQuery::create()->findOneByCode('paid');
+        $processingStatus = OrderStatusQuery::create()->findOneByCode('processing');
+
         $orders = OrderQuery::create()
             ->filterByOrderStatus($paidStatus)
             ->find()
@@ -164,5 +167,11 @@ class ProcessAndInvoiceController extends BaseAdminController
 
         $fileName = 'ordersInvoice_' . (new \DateTime())->format("Y-m-d_H-i-s") . '.pdf';
         $htmltopdf->output($fileName, 'D');
+
+        foreach ($orders as $order) {
+            $order->setOrderStatus($processingStatus)->save();
+        }
+
+        return $this->generateRedirectFromRoute('admin.order.list');
     }
 }
